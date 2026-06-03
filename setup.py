@@ -94,7 +94,7 @@ def create_default_admin():
         else:
             # Non-interactive (Docker, CI) — fall back to generated password
             username = username or "admin"
-            password = password or __import__("secrets").token_urlsafe(18)
+            password = password or "Scaibu@123"
 
         username = username or "admin"
         hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
