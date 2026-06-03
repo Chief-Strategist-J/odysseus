@@ -135,12 +135,13 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
         token = await asyncio.to_thread(auth_manager.create_session, username, body.password)
         if not token:
             raise HTTPException(401, "Invalid credentials")
+        is_hf_space = os.getenv("SPACE_ID") is not None or os.getenv("ALLOW_FRAMING", "false").lower() == "true"
         cookie_kwargs = dict(
             key=SESSION_COOKIE,
             value=token,
             httponly=True,
-            samesite="lax",
-            secure=os.getenv("SECURE_COOKIES", "false").lower() == "true",
+            samesite="none" if is_hf_space else "lax",
+            secure=True if is_hf_space else (os.getenv("SECURE_COOKIES", "false").lower() == "true"),
             path="/",
         )
         if body.remember:
@@ -153,7 +154,13 @@ def setup_auth_routes(auth_manager: AuthManager) -> APIRouter:
         token = request.cookies.get(SESSION_COOKIE)
         if token:
             auth_manager.revoke_token(token)
-        response.delete_cookie(SESSION_COOKIE, path="/")
+        is_hf_space = os.getenv("SPACE_ID") is not None or os.getenv("ALLOW_FRAMING", "false").lower() == "true"
+        response.delete_cookie(
+            SESSION_COOKIE,
+            path="/",
+            samesite="none" if is_hf_space else "lax",
+            secure=True if is_hf_space else (os.getenv("SECURE_COOKIES", "false").lower() == "true"),
+        )
         return {"ok": True}
 
     @router.get("/status")
