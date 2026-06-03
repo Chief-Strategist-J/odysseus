@@ -64,6 +64,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
 
+        ancestors = "'self' https://huggingface.co https://*.hf.space" if (os.environ.get("SPACE_ID") or os.environ.get("ALLOW_FRAMING") == "true") else "'none'"
+
         if is_report:
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
@@ -72,7 +74,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
                 "font-src 'self'; "
                 "img-src 'self' data: blob: https:; "
                 "connect-src 'self'; "
-                "frame-ancestors 'none'"
+                f"frame-ancestors {ancestors}"
             )
         elif is_tool_render:
             # Tool iframe content: skip all framing headers — the iframe's
@@ -80,7 +82,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             # Don't overwrite the route's own restrictive CSP either.
             pass
         else:
-            response.headers["X-Frame-Options"] = "DENY"
+            if not (os.environ.get("SPACE_ID") or os.environ.get("ALLOW_FRAMING") == "true"):
+                response.headers["X-Frame-Options"] = "DENY"
             # NOTE: `style-src 'unsafe-inline'` is intentionally retained.
             # `static/index.html` and `static/login.html` ship inline <style>
             # blocks, and several JS modules build runtime `style=""` attrs.
@@ -96,6 +99,6 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
                 "media-src 'self' blob:; "
                 "connect-src 'self'; "
                 "frame-src 'self'; "
-                "frame-ancestors 'none'"
+                f"frame-ancestors {ancestors}"
             )
         return response
