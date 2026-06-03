@@ -215,11 +215,12 @@ class TestCurateModels:
         assert "deepseek-coder" in extra
 
     def test_xai_curated(self):
-        models = ["grok-4", "grok-3-fast", "grok-2"]
+        models = ["grok-4", "grok-3-fast", "grok-2", "grok-beta"]
         curated, extra = _curate_models(models, "xai")
         assert "grok-4" in curated
         assert "grok-3-fast" in curated
-        assert "grok-2" in extra
+        assert "grok-2" in curated
+        assert "grok-beta" in extra
 
     def test_xai_current_grok_43_curated(self):
         curated, extra = _curate_models(["grok-4.3", "grok-4.3-fast"], "xai")

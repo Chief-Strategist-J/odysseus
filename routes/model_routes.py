@@ -262,6 +262,7 @@ _PROVIDER_CURATED = {
     ],
     "xai": [
         "grok-4.3", "grok-4", "grok-4-fast", "grok-3", "grok-3-fast",
+        "grok-2", "grok-2-vision",
     ],
 }
 

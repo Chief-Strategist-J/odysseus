@@ -11,7 +11,7 @@
 A self-hosted AI workspace -- meant to be the self-hosted version of the UI experience you get from ChatGPT and Claude. But with more jank and fun. Running on your own hardware, with your own data -- local-first, privacy-first, and no trojan.
 
 ## Features
-  - **Chat** -- chat with any local model or API; adding them is super simple.<br>　<sub>vLLM · llama.cpp · Ollama · OpenRouter · OpenAI</sub>
+  - **Chat** -- chat with any local model or API; adding them is super simple.<br>　<sub>vLLM · llama.cpp · Ollama · OpenRouter · OpenAI · xAI (Grok)</sub>
   - **Agent** -- hand it tools and let it run the whole task itself.<br>　<sub>built on [opencode](https://github.com/anomalyco/opencode) · MCP · web · files · shell · skills · memory</sub>
   - **Cookbook** -- Scans your hardware, recommends models, click to download and serve.. easy!<br>　<sub>built on [llmfit](https://github.com/AlexsJones/llmfit) · VRAM-aware · GGUF / FP8 / AWQ · fit scoring · vLLM / llama.cpp serving</sub>
   - **Deep Research** -- multi-step runs that gather, read, and synthesize sources into a nice visual report.<br>　<sub>adapted from [Tongyi DeepResearch](https://github.com/Alibaba-NLP/DeepResearch)</sub>
@@ -357,6 +357,15 @@ Common internal-only ports from the default docs/compose setup:
 Help is welcome. The best entry points are fresh-install testing, provider setup
 bugs, mobile/editor polish, docs, and small focused refactors. See
 [ROADMAP.md](ROADMAP.md) for the current help-wanted list.
+
+## Connecting Grok (xAI) and other API Providers
+
+You can connect Odysseus to external API providers like xAI (Grok) directly from the Web UI:
+1. Open the Odysseus Web UI and go to **Settings** -> **Model Endpoints**.
+2. Click **Add Endpoint**.
+3. Select **xAI Grok** from the preset list (or configure a custom OpenAI-compatible endpoint with the base URL `https://api.x.ai/v1`).
+4. Enter your xAI API Key and save.
+5. The system will automatically probe and populate the model selection list with Grok models like `grok-2` or `grok-3`.
 
 ## Configuration
 Most setup is done inside the app with `/setup` or **Settings**. Use `.env`
