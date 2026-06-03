@@ -1,3 +1,13 @@
+---
+title: Odysseus AI Workspace
+emoji: 🧭
+colorFrom: purple
+colorTo: indigo
+sdk: docker
+app_port: 7000
+pinned: false
+---
+
 # Odysseus
 
 ```
