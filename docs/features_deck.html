@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odysseus AI Workspace - Features Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #9d4edd;
+      --secondary: #240046;
+      --accent: #3f37c9;
+      --text: #e0e1dd;
+      --text-muted: #8d99ae;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at 0% 0%, var(--secondary) 0%, transparent 40%),
+                  radial-gradient(circle at 100% 100%, var(--accent) 0%, transparent 45%),
+                  #030406;
+    }
+
+    .deck-container {
+      width: 90vw;
+      max-width: 1000px;
+      height: 75vh;
+      max-height: 650px;
+      position: relative;
+      perspective: 1500px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 16, 26, 0.45);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      pointer-events: none;
+      transform: rotateY(45deg) translateZ(-100px);
+      transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: rotateY(0deg) translateZ(0);
+    }
+
+    .slide.prev {
+      transform: rotateY(-45deg) translateZ(-100px);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      background: linear-gradient(135deg, #e2afff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+    }
+
+    .slide-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .content {
+      margin: auto 0;
+    }
+
+    h1, h2 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 46px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff, #b39ddb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 34px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    p.subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateY(-4px);
+      border-color: rgba(157, 77, 221, 0.4);
+    }
+
+    .feature-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .highlight-list {
+      list-style-type: none;
+    }
+
+    .highlight-list li {
+      font-size: 15px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .highlight-list li::before {
+      content: "✦";
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    button:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(157, 77, 221, 0.4);
+    }
+
+    .progress-bar {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+    
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">1 / 10</div>
+      </header>
+      <div class="content">
+        <h1>Odysseus AI Workspace</h1>
+        <p class="subtitle">A local-first, privacy-first, fully-customizable self-hosted AI suite designed to run on your own hardware, using your own data, and respecting your privacy.</p>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 10%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 2: Multi-Model Chat -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">2 / 10</div>
+      </header>
+      <div class="content">
+        <h2>1. Multi-Model Chat & Comparison</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>💬 Broad API Connectivity</h3>
+            <p>Direct integration with llama.cpp, Ollama, vLLM, OpenRouter, OpenAI, and xAI (Grok). Swappable models on-the-fly.</p>
+          </div>
+          <div class="feature-card">
+            <h3>⚖️ Blind Model Comparison</h3>
+            <p>Run tests side-by-side blindly to eliminate cognitive model bias, featuring a synthesiser output report comparing performance.</p>
+          </div>
+          <div class="feature-card">
+            <h3>✨ Chat Presets & Contexts</h3>
+            <p>Save distinct system contexts, temperature parameters, and instructions as presets to speed up recurring workflows.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📂 Multimodal File Support</h3>
+            <p>Attach documents, text, code, or images for OCR, visual analysis, and inline coding context directly inside chat threads.</p>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 20%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 3: Autonomous Agents & Tooling -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">3 / 10</div>
+      </header>
+      <div class="content">
+        <h2>2. Autonomous Agents & Core Tools</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>🛠️ Model Context Protocol (MCP)</h3>
+            <p>Plug in standard MCP servers to give models direct access to browsers, Slack, local shell, databases, or custom tools.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🐚 Local Shell & Sandbox</h3>
+            <p>Let agents run background CLI scripts, check dependencies, compile code, and run commands autonomously (gated by admin settings).</p>
+          </div>
+          <div class="feature-card">
+            <h3>🗄️ Filesystem Operations</h3>
+            <p>Allow agents to read, write, organize, modify, and delete workspace code and documents dynamically.</p>
+          </div>
+          <div class="feature-card">
+            <h3>💻 Custom Skills Creation</h3>
+            <p>Compose custom Python code snippets directly from the UI settings to create new tools for your agents on-the-fly.</p>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 30%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 4: Deep Research Engine -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">4 / 10</div>
+      </header>
+      <div class="content">
+        <h2>3. Deep Research Engine</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>🕵️ Agentic Multi-Step Search</h3>
+            <p>The research loops recursively browse the web, execute search queries, and rank targets to compile rich sources.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📄 Page Scraping & Extraction</h3>
+            <p>Converts HTML pages to clean markdown summaries, processing tables, content, and links to resolve answers.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📊 Synthesis & Reporting</h3>
+            <p>Formats gathered sources into detailed markdown reports with hierarchical structures, citations, and summaries.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🖥️ SearXNG Integration</h3>
+            <p>Leverages a local SearXNG metasearch instance to avoid tracker logs or third-party usage restrictions.</p>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 40%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 5: Built-in Document Editor -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">5 / 10</div>
+      </header>
+      <div class="content">
+        <h2>4. Interactive Document Workspace</h2>
+        <ul class="highlight-list">
+          <li><strong>Multi-Tab Code & Markdown Editor:</strong> Edit text, markdown, HTML, and CSV logs with syntax highlighting and dynamic file saves.</li>
+          <li><strong>Co-Author AI Assistance:</strong> Trigger inline AI rewriting commands, grammar fixes, text expansions, and formatting changes.</li>
+          <li><strong>Integrated Document Viewer:</strong> Keep reference PDFs, manuals, and books open side-by-side with your writing workspace.</li>
+          <li><strong>Document Exporter:</strong> Export workspace drafts directly to HTML, plain text, or standard Markdown files.</li>
+        </ul>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 6: Vector Memory & Skills RAG -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">6 / 10</div>
+      </header>
+      <div class="content">
+        <h2>5. Vector Memory & RAG</h2>
+        <ul class="highlight-list">
+          <li><strong>Persistent RAG Memory:</strong> Utilizes ChromaDB vector database to store and retrieve historical conversation facts.</li>
+          <li><strong>Local ONNX Embeddings:</strong> Features fastembed execution pipelines on the host to enable local vector indexing without cloud APIs.</li>
+          <li><strong>Skills Repository:</strong> Retains developer-defined skills and scripts that agents automatically fetch when matching user keywords.</li>
+          <li><strong>Import & Export Utilities:</strong> Export vector maps and database states for clean backups or remote setup deployment.</li>
+        </ul>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 7: AI Email Client -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">7 / 10</div>
+      </header>
+      <div class="content">
+        <h2>6. Smart AI Email Client</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>📬 Multi-Account IMAP/SMTP</h3>
+            <p>Sync all your email accounts natively. Supports sending, receiving, replying, and managing folders.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🚦 Smart Urgency Triage</h3>
+            <p>AI automatically classifies and flags incoming emails based on temporal urgency, task requests, and importance.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📝 Auto-Draft Repliess</h3>
+            <p>Generate contextual responses on-demand, referencing historical emails, calendar availability, and task statuses.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🚫 Spam & Digest Filtering</h3>
+            <p>Filters unwanted marketing noise and formats dense, readable daily summary digests from incoming newsletters.</p>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 8: Calendar, Notes & Tasks -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">8 / 10</div>
+      </header>
+      <div class="content">
+        <h2>7. Calendar, Notes & Tasks</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>📅 CalDAV Calendar Sync</h3>
+            <p>Connect and pull agendas from Radicale, Nextcloud, Apple, or Fastmail. Full support for ICS imports/exports.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📝 Quick Notes & Todos</h3>
+            <p>Record fast reminders and maintain task lists that agents can read, update, organize, and act upon.</p>
+          </div>
+          <div class="feature-card">
+            <h3>⏰ Cron Task Scheduler</h3>
+            <p>Set background tasks (e.g. check emails every hour, compile a report, run scraper) for agent execution.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🔔 Multi-Channel Alerts</h3>
+            <p>Get instant notifications via native browser, custom email pings, or ntfy.sh instant Android notifications.</p>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 9: Platform, Security & Mobile -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">9 / 10</div>
+      </header>
+      <div class="content">
+        <h2>8. Platform, Security & Mobile PWA</h2>
+        <ul class="highlight-list">
+          <li><strong>Installable PWA:</strong> Add Odysseus directly to your phone, tablet, or desktop with responsive layout support and touch gestures.</li>
+          <li><strong>Native Window App Wrappers:</strong> Standalone startup utilities for macOS and Windows to launch in dedicated borders.</li>
+          <li><strong>Multi-User Authentication:</strong> Features robust user isolation, permission tiers, and 2FA authentication guards.</li>
+          <li><strong>Private Data Sandbox:</strong> Keeps API keys, databases, vectors, document uploads, and memories strictly local (gitignored).</li>
+        </ul>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 90%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Slide 10: Local serving & UI Customization -->
+    <div class="slide">
+      <header>
+        <div class="logo">ODYSSEUS</div>
+        <div class="slide-num">10 / 10</div>
+      </header>
+      <div class="content">
+        <h2>9. Customization & Local Serving</h2>
+        <ul class="highlight-list">
+          <li><strong>Interactive Theme Editor:</strong> Tweak styles, colors, dark modes, glassmorphism filters, and fonts directly from settings.</li>
+          <li><strong>Cookbook serve scanner:</strong> Scans system architecture, motherboard, and VRAM layout to suggest matching local weights.</li>
+          <li><strong>Weight Downloader:</strong> Download GGUF, FP8, or AWQ models directly from HuggingFace to your storage folder.</li>
+          <li><strong>Local Serving Engines:</strong> Launch and manage background serve jobs for local models using vLLM or llama.cpp.</li>
+        </ul>
+      </div>
+      <footer>
+        <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+        <div class="controls">
+          <button onclick="prevSlide()">←</button>
+          <button onclick="nextSlide()">→</button>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+
+    function showSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      slides[currentSlide].classList.remove('prev');
+      
+      if (index > currentSlide) {
+        slides[currentSlide].classList.add('prev');
+      }
+      
+      currentSlide = (index + slides.length) % slides.length;
+      
+      slides.forEach((slide, idx) => {
+        if (idx !== currentSlide) {
+          slide.classList.remove('active');
+        }
+      });
+      
+      slides[currentSlide].classList.add('active');
+      slides[currentSlide].classList.remove('prev');
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+  </script>
+</body>
+</html>
